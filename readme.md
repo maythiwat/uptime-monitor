@@ -3,9 +3,9 @@
 This is project for monitor my server network that available or not. This can be use inbound and outbound.
 
 ## Features
-- [/] Ping to specific address
-- [/] Store uptime history with duration
-- [/] Uptime history via webpage
+- [x] Ping to specific address
+- [x] Store uptime history with duration
+- [x] Uptime history via webpage
 
 ## Todos
 - [ ] Support cluster
