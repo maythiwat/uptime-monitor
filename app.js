@@ -5,7 +5,9 @@ const ping = require('ping')
 const express = require('express')
 const app = express()
 
-const host = '8.8.8.8'
+require('dotenv').config()
+
+const host = process.env.TARGET_HOST
 const STATE = { DOWN: 'down', UP: 'up' }
 
 const downDB = require('./db.json')
@@ -25,7 +27,7 @@ const job = new CronJob('* * * * * *', async () => {
     const { alive, time } = await ping.promise.probe(host)
     const diff = differenceInMilliseconds(new Date(), stateSince)
 
-    if (diff >= 1500) {
+    if (diff >= process.env.DELAY_MS) {
         console.log(`Alive:`, alive, `Time: ${time}ms`)
         if (currentState === STATE.UP) {
             if (!alive) {
