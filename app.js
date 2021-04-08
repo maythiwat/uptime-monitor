@@ -11,6 +11,7 @@ const host = process.env.TARGET_HOST
 const STATE = { DOWN: 'down', UP: 'up' }
 
 const downDB = require('./db.json')
+const e = require('express')
 let currentState = STATE.UP
 let stateSince = new Date()
 
@@ -74,11 +75,24 @@ app.get('/', (req, res) => {
     html += '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">'
     html += '</head><body class="pt-5">'
     try {
+        var reversedDB = [].concat(downDB).reverse();
+
         html += '<div class="container">'
+
+        html += '<div class="mt-3 alert '
+        if (reversedDB[0].state === STATE.UP) {
+            html += 'alert-success">'
+            html += 'Great! Server is currently up!'
+        }else{
+            html += 'alert-danger">'
+            html += 'Oops! Server is currently down!'
+        }
+        html += '</div>'
+
         html += '<div class="card">'
         html += '<div class="card-header">Uptime table</div>'
         html += '<table class="table mb-0">'
-        for (record of downDB) {
+        for (record of reversedDB) {
             const start = typeof record.start === 'string' ? parseISO(record.start) : record.start
             let end
             if(record.end === null) {
