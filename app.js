@@ -131,5 +131,14 @@ app.get('/', (req, res) => {
         return res.status(500)
     }
 })
+
+app.get('/api/status', (req, res) => {
+    var reversedDB = [].concat(downDB).reverse();
+    let isUp = reversedDB[0].state === STATE.UP;
+    return res.send({
+        status: isUp
+    });
+})
+
 app.listen(process.env.PORT || 22222)
 job.start()
