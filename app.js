@@ -10,8 +10,11 @@ require('dotenv').config()
 const host = process.env.TARGET_HOST
 const STATE = { DOWN: 'down', UP: 'up' }
 
+if (!fs.existsSync('./db.json')) {
+    fs.writeFileSync('./db.json', '[]');
+}
+
 const downDB = require('./db.json')
-const e = require('express')
 let currentState = STATE.UP
 let stateSince = new Date()
 
@@ -133,11 +136,9 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/status', (req, res) => {
-    var reversedDB = [].concat(downDB).reverse();
-    let isUp = reversedDB[0].state === STATE.UP;
-    return res.send({
-        status: isUp
-    });
+    let i = (downDB.length - 1);
+    let status = downDB[i].state === STATE.UP;
+    return res.send({ status });
 })
 
 app.listen(process.env.PORT || 22222)
